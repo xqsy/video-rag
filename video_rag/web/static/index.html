@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video RAG</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div id="activity-banner" class="activity-banner hidden" aria-live="polite"></div>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">VR</div>
+          <div>
+            <h1>Video RAG</h1>
+            <p>локальная библиотека и чат</p>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-button active" data-tab="chat">Чат</button>
+          <button class="nav-button" data-tab="library">Библиотека</button>
+        </nav>
+
+        <section class="sidebar-block compact">
+          <label for="video-select">Видео</label>
+          <select id="video-select"></select>
+        </section>
+
+        <section class="sidebar-block compact">
+          <div class="stats" id="stats"></div>
+        </section>
+
+        <section class="sidebar-block compact" id="status-box">
+          <strong>Статус</strong>
+          <p id="status-text">Готово.</p>
+        </section>
+      </aside>
+
+      <main class="content">
+        <section class="tab active" id="tab-chat">
+          <header class="panel-header">
+            <div>
+              <h2>Чат по видео</h2>
+              <p>Выбор видео, просмотр, конспект и ответы в одном месте.</p>
+            </div>
+            <div class="toolbar">
+              <button id="generate-summary" class="secondary">Сгенерировать конспект</button>
+              <button id="clear-chat" class="secondary">Очистить чат</button>
+            </div>
+          </header>
+
+          <section class="grid grid-chat">
+            <article class="panel">
+              <div class="panel-title-row">
+                <h3>Видео</h3>
+                <span id="video-meta" class="muted">Нет выбранного видео</span>
+              </div>
+              <div class="video-frame">
+                <video id="video-player" controls preload="metadata"></video>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-title-row">
+                <h3>История</h3>
+                <span id="chat-count" class="muted">0 сообщений</span>
+              </div>
+              <div id="chat-activity" class="activity-inline hidden" aria-live="polite"></div>
+              <div id="chat-messages" class="chat-messages empty">Задайте первый вопрос по видео.</div>
+              <form id="chat-form" class="chat-form">
+                <textarea id="question-input" rows="3" placeholder="Спросите о содержании видео"></textarea>
+                <button type="submit">Отправить</button>
+              </form>
+            </article>
+          </section>
+
+          <article class="panel summary-panel">
+            <div class="panel-title-row">
+              <h3>Конспект</h3>
+            </div>
+            <div id="summary-activity" class="activity-inline hidden" aria-live="polite"></div>
+            <div id="summary-content" class="summary-content empty">Конспект ещё не сгенерирован.</div>
+          </article>
+        </section>
+
+        <section class="tab" id="tab-library">
+          <header class="panel-header">
+            <div>
+              <h2>Библиотека</h2>
+              <p>Загрузка, переиндексация, удаление и экспорт транскриптов.</p>
+            </div>
+          </header>
+
+          <section class="grid grid-library">
+            <article class="panel">
+              <div class="panel-title-row">
+                <h3>Загрузить видео</h3>
+              </div>
+              <form id="upload-form" class="stack-form">
+                <input id="upload-file" type="file" accept=".mp4,.mkv,.mov,.wav,.mp3,.m4a" />
+                <div class="form-row">
+                  <label>
+                    Качество транскрибации
+                    <select id="upload-profile">
+                      <option value="draft">draft</option>
+                      <option value="final">final</option>
+                    </select>
+                  </label>
+                  <label>
+                    Язык (опционально)
+                    <input id="upload-language" type="text" placeholder="ru, en и т.д." />
+                  </label>
+                </div>
+                <button type="submit">Загрузить и проиндексировать</button>
+              </form>
+            </article>
+
+            <article class="panel">
+              <div class="panel-title-row">
+                <h3>Видео в библиотеке</h3>
+                <span id="library-count" class="muted">0</span>
+              </div>
+              <div id="library-list" class="library-list empty">Библиотека пуста.</div>
+            </article>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <template id="chat-message-template">
+      <article class="message">
+        <div class="message-role"></div>
+        <div class="message-content"></div>
+        <div class="message-citations"></div>
+      </article>
+    </template>
+
+    <template id="library-card-template">
+      <article class="library-card">
+        <div class="library-head">
+          <div>
+            <h4 class="library-title"></h4>
+            <p class="library-meta"></p>
+          </div>
+          <button class="secondary open-chat-button">Открыть в чате</button>
+        </div>
+        <p class="library-path"></p>
+        <div class="library-actions">
+          <select class="reindex-profile">
+            <option value="draft">draft</option>
+            <option value="final">final</option>
+          </select>
+          <button class="secondary reindex-button">Переиндексировать</button>
+          <a class="secondary download-json" href="#">JSON</a>
+          <a class="secondary download-srt" href="#">SRT</a>
+          <button class="danger delete-button">Удалить</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
