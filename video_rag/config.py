@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     whisper_word_timestamps: bool = False
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     openrouter_api_key: str | None = None
-    openrouter_model: str = "deepseek/deepseek-v4-flash"
+    openrouter_model: str = "deepseek/deepseek-v4-flash" # nvidia/nemotron-3-nano-30b-a3b:free
     request_timeout_seconds: float = 60.0
     answer_max_tokens: int = 1200
     summary_chunk_max_tokens: int = 1800
